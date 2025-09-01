@@ -11,6 +11,10 @@ import './charts/ChartjsConfig';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
+import {ProtectedRoute} from "./auth/ProtectedRoute";
+import LoginPage from "./pages/loginPage";
+import Campaigns from "./pages/campaigns"
+import PageWrapper from "./pages/pagewrapper";
 
 function App() {
 
@@ -25,7 +29,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route exact path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+        <Route exact path="/campaigns" element={<ProtectedRoute><PageWrapper><Campaigns/></PageWrapper></ProtectedRoute>} />
       </Routes>
     </>
   );
