@@ -14,7 +14,9 @@ import Dashboard from './pages/Dashboard';
 import {ProtectedRoute} from "./auth/ProtectedRoute";
 import LoginPage from "./pages/loginPage";
 import Campaigns from "./pages/campaigns"
+import CampaignsStatics from "./pages/campaignsstatics"
 import PageWrapper from "./pages/pagewrapper";
+import CampaignCreate from "./pages/campaignCreate";
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route exact path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
         <Route exact path="/campaigns" element={<ProtectedRoute><PageWrapper><Campaigns/></PageWrapper></ProtectedRoute>} />
+        <Route exact path="/campaigns/statics" element={<ProtectedRoute><PageWrapper><CampaignsStatics/></PageWrapper></ProtectedRoute>} />
+        <Route exact path="/campaigns/create" element={<ProtectedRoute><PageWrapper><campaignCreate/></PageWrapper></ProtectedRoute>} />
       </Routes>
     </>
   );
