@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
-import { Navigate } from "react-router-dom";
 
 import UserAvatar from '../images/user-avatar-32.png';
-import {useSession, useUser} from "@descope/react-sdk";
+import {useDescope, useUser} from "@descope/react-sdk";
 
 function DropdownProfile({
   align
@@ -16,7 +15,12 @@ function DropdownProfile({
   const dropdown = useRef(null);
 
   const { user } = useUser();
-  const { signOut } = useSession();
+  const { logout } = useDescope();
+
+  const handleLogout = useCallback(() => {
+    console.log("getting to signout")
+    logout()
+  }, [logout])
 
 
   // close on click outside
@@ -90,8 +94,7 @@ function DropdownProfile({
             <li>
               <Link
                 className="font-medium text-sm text-violet-500 hover:text-violet-600 dark:hover:text-violet-400 flex items-center py-1 px-3"
-                to="/login"
-                onClick={() => signOut().then(setDropdownOpen(!dropdownOpen))}
+                onClick={handleLogout}
               >
                 Sign Out
               </Link>
