@@ -35,7 +35,7 @@ function App() {
         <Route exact path="/" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
         <Route exact path="/campaigns" element={<ProtectedRoute><PageWrapper><Campaigns/></PageWrapper></ProtectedRoute>} />
         <Route exact path="/campaigns/statics" element={<ProtectedRoute><PageWrapper><CampaignsStatics/></PageWrapper></ProtectedRoute>} />
-        <Route exact path="/campaigns/create" element={<ProtectedRoute><PageWrapper><campaignCreate/></PageWrapper></ProtectedRoute>} />
+        <Route exact path="/campaigns/create" element={<ProtectedRoute><PageWrapper><CampaignCreate/></PageWrapper></ProtectedRoute>} />
       </Routes>
     </>
   );

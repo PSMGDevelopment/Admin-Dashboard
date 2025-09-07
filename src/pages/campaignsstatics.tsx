@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {fetchCampaignsStatics} from "../api/campaignsStaticsAPI"
-import {CampaignSummaryResponse} from "../api/types/CampaignStaticResponse";
+import {CampaignSummaryType} from "../api/types/CampaignSummaryType";
 import DoughnutChart from "../charts/DoughnutChart"
 
 // Import utilities
@@ -9,7 +9,7 @@ import {getCssVariable} from '../utils/Utils';
 
 export default function CampaignsStatics() {
 
-    const [campaignStatics, setCampaignsStatics] = useState<CampaignSummaryResponse>({
+    const [campaignStatics, setCampaignsStatics] = useState<CampaignSummaryType>({
         TotalCampaigns: 0,
         ActiveCampaigns: 0,
         ScheduledCampaigns: 0,
