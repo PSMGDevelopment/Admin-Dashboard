@@ -18,7 +18,6 @@ function DropdownProfile({
   const { logout } = useDescope();
 
   const handleLogout = useCallback(() => {
-    console.log("getting to signout")
     logout()
   }, [logout])
 

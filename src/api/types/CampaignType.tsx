@@ -1,8 +1,8 @@
 export type CampaignType = {
   id: string;
   name: string;
-  operatorId: string;
+  operatorID: string;
   tenant: string;
-  active: string;
+  active: boolean;
   status: string;
 };

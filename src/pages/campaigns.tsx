@@ -30,13 +30,16 @@ export default function Campaigns() {
                             className="text-xs uppercase text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-700/50 rounded-xs">
                         <tr>
                             <th className="p-2">
-                                <div className="font-semibold text-center">ID</div>
-                            </th>
-                            <th className="p-2">
                                 <div className="font-semibold text-center">Name</div>
                             </th>
                             <th className="p-2">
+                                <div className="font-semibold text-center">Organization</div>
+                            </th>
+                            <th className="p-2">
                                 <div className="font-semibold text-center">Status</div>
+                            </th>
+                            <th className="p-2">
+                                <div className="font-semibold text-center">Team Count</div>
                             </th>
                             <th className="p-2">
                                 <div className="font-semibold text-center"></div>
@@ -49,13 +52,16 @@ export default function Campaigns() {
                             campaigns.map((campaign, index) => (
                                 <tr key={campaign.id || index}>
                                     <td className="p-2">
-                                        <div className="text-center">{campaign.id}</div>
-                                    </td>
-                                    <td className="p-2">
                                         <div className="text-center">{campaign.name}</div>
                                     </td>
                                     <td className="p-2">
+                                        <div className="text-center">{campaign.organization_name}</div>
+                                    </td>
+                                    <td className="p-2">
                                         <div className="text-center">{campaign.status}</div>
+                                    </td>
+                                    <td className="p-2">
+                                        <div className="text-center">{campaign.team_count}</div>
                                     </td>
                                     <td className="p-2">
                                         <button onClick={(e) => {

@@ -5,5 +5,5 @@ import {TeamType} from "./TeamType";
 export type FullCampaign = {
   Campaign: CampaignType;
   Organization: OrganizationType
-  Teams: [TeamType]
+  Teams: TeamType[]
 };

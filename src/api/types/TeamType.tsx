@@ -1,9 +1,11 @@
+import {CoachType} from "./CoachType";
+
 export type TeamType = {
   id: string;
-  organizationId: string;
-  campaignId: string;
+  organization: string;
+  campaign_id: string;
   campaign: string;
-  coach: string;
+  coach: CoachType;
   name: string;
   tenant: string
   status: string;
