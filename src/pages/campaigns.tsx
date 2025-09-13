@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {fetchCampaigns} from "../api/campaignsAPI"
 import CampaignModal from "../pages/campaignModal/campaignEditModal"
 
@@ -15,6 +15,17 @@ export default function Campaigns() {
             .then((data) => setCampaigns(data))
             .catch((err) => console.error(err));
     }, [page]);
+
+    const downLoadThing = (campaignID) => {
+        const link = document.createElement("a");
+        link.href = "https://pub-c9dbc3c3d01040c9aa669fc09edaa6b5.r2.dev/" + campaignID + ".pdf";
+        link.target = "_blank";
+        link.download = "OrderForm.pdf" || "file";
+        link.rel = "noopener noreferrer";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     return (
         <div className="col-span-full xl:col-span-8 bg-white dark:bg-gray-800 shadow-xs rounded-xl">
@@ -41,7 +52,10 @@ export default function Campaigns() {
                             <th className="p-2">
                                 <div className="font-semibold text-center">Team Count</div>
                             </th>
-                            <th className="p-2">
+                            <th className="p-4">
+                                <div className="font-semibold text-center"></div>
+                            </th>
+                            <th className="p-4">
                                 <div className="font-semibold text-center"></div>
                             </th>
                         </tr>
@@ -63,7 +77,21 @@ export default function Campaigns() {
                                     <td className="p-2">
                                         <div className="text-center">{campaign.team_count}</div>
                                     </td>
-                                    <td className="p-2">
+                                    <td className="p-4">
+                                        <button onClick={(e) => {
+                                            downLoadThing(campaign.id)
+                                        }} type={"button"}
+                                                className="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
+                                            <svg className="fill-current text-gray-400 dark:text-gray-500 shrink-0"
+                                                 width="16" height="16" viewBox="4 4 20 20">
+                                                <path
+                                                    d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2 M7 11l5 5l5 -5 M12 4l0 12"/>
+                                            </svg>
+
+                                            <span className="ml-2">Download Order Form</span>
+                                        </button>
+                                    </td>
+                                    <td className="p-4">
                                         <button onClick={(e) => {
                                             e.stopPropagation();
                                             setSelectedCampaign(campaign)

@@ -137,7 +137,6 @@ export default function CampaignCreate() {
                         <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Create Campaign</h1>
                     </div>
                     <div>
-                        <h2 className="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-6">Organization</h2>
                         <label className="block text-sm font-medium mb-1" htmlFor="mandatory">
                             Organization Name <span className="text-red-500">*</span>
                         </label>
@@ -152,7 +151,7 @@ export default function CampaignCreate() {
                                 <input type="radio" name="radio-buttons" className="form-radio"
                                        onChange={() => handleOrgTypeUpdate(0)}
                                 />
-                                <span className="text-sm ml-2">Team</span>
+                                <span className="text-sm ml-2">School</span>
                             </label>
                         </div>
                         <div className="m-3">
@@ -163,18 +162,9 @@ export default function CampaignCreate() {
                                 <span className="text-sm ml-2">Club</span>
                             </label>
                         </div>
-                        <div className="m-3">
-                            <label className="flex items-center">
-                                <input type="radio" name="radio-buttons" className="form-radio" defaultChecked
-                                       onChange={() => handleOrgTypeUpdate(2)}
-                                />
-                                <span className="text-sm ml-2">Else</span>
-                            </label>
-                        </div>
                     </div>
                     </div>
                     <div>
-                        <h2 className="text-2xl text-gray-800 dark:text-gray-100 font-bold mb-6">Campaign</h2>
                         <label className="block text-sm font-medium mb-1" htmlFor="mandatory">
                             Campaign Name <span className="text-red-500">*</span>
                         </label>
