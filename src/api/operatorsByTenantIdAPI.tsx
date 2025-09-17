@@ -1,6 +1,6 @@
 import { apiClient } from "./apiClient";
 
-export async function fetchOperatorByTenantId(tenantId: string) {
+export async function fetchOperatorByTenantID(tenantId: string) {
 
   const res = await apiClient.get(`/operators/tenant/${encodeURIComponent(tenantId)}`);
 

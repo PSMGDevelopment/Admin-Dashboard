@@ -2,10 +2,11 @@ import {useEffect, useState} from "react";
 import {FullCampaign} from "../api/types/FullCampaign";
 import {TeamType} from "../api/types/TeamType";
 import {CampaignType} from "../api/types/CampaignType";
-import {fetchOperatorByTenantId} from "../api/operatorsByTenantIdAPI";
+import {fetchOperatorByTenantID} from "../api/operatorsByTenantIdAPI";
 import {useUser} from "@descope/react-sdk";
 import {OrganizationType} from "../api/types/OrganizationType";
 import {createFullCampaignAPI} from "../api/createFullCampaignAPI";
+import Notification from "../components/Notification";
 
 
 export default function CampaignCreate() {
@@ -32,14 +33,12 @@ export default function CampaignCreate() {
             tenant: tenantName
         }));
 
-        fetchOperatorByTenantId(tenantName).then(operator => {
-            console.log(operator.id)
+        fetchOperatorByTenantID(tenantName).then(operator => {
             setCampaign(prev => ({
                 ...prev,
                 operatorID: operator?.id || ""
             }));
         });
-        console.log(campaign)
     }, [isUserLoading, user]);
 
     const [teams, setTeams] = useState<TeamType[]>([]);
@@ -55,7 +54,7 @@ export default function CampaignCreate() {
         id: "",
         name: "",
         tenant: "",
-        isSchool: false,
+        isSchool: true,
         isClub: false
     })
 
@@ -65,13 +64,13 @@ export default function CampaignCreate() {
             {
                 id: "",
                 organization: "",
-                campaign_id: "",
+                campaignID: "",
                 campaign: "",
                 coach: {id: "", descopeUserID: "", teamID: "", displayName: ""},
                 name: "",
                 tenant: currentTenant,
                 status: "new",
-                expectedPlayerCount: 1
+                expectedPlayerCount: 0
             }
         ])
     }
@@ -101,7 +100,7 @@ export default function CampaignCreate() {
         if (selection === 0) {
             setOrganization(prev => ({
                 ...prev,
-                isTeam: true,
+                isSchool: true,
                 isClub: false,
             }));
             return;
@@ -109,7 +108,7 @@ export default function CampaignCreate() {
         if (selection === 1) {
             setOrganization(prev => ({
                 ...prev,
-                isTeam: false,
+                isSchool: false,
                 isClub: true,
             }));
             return;
@@ -117,7 +116,7 @@ export default function CampaignCreate() {
         if (selection === 2) {
             setOrganization(prev => ({
                 ...prev,
-                isTeam: false,
+                isSchool: false,
                 isClub: false,
             }));
             return;
@@ -125,8 +124,11 @@ export default function CampaignCreate() {
         return;
     }
 
+    const [validationNotification, setValidationNotification] = useState(false);
+    const [validationErrorList, setValidationErrorList] = useState<String[]>([]);
+
     const handleCreate = () => {
-        createCampaign(campaign, organization, teams)
+        createCampaign(campaign, organization, teams, validationErrorList, setValidationErrorList, setValidationNotification)
     }
 
     return (
@@ -134,7 +136,8 @@ export default function CampaignCreate() {
             <div className="px-4 sm:px-6 lg:px-2 py-2 w-full max-w-[96rem] mx-auto">
                 <div className={"space-y-8 mt-8"}>
                     <div>
-                        <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Create Campaign</h1>
+                        <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Create
+                            Campaign</h1>
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1" htmlFor="mandatory">
@@ -146,23 +149,24 @@ export default function CampaignCreate() {
                     </div>
                     <div>
                         <div className="flex flex-wrap items-center -m-3">
-                        <div className="m-3">
-                            <label className="flex items-center">
-                                <input type="radio" name="radio-buttons" className="form-radio"
-                                       onChange={() => handleOrgTypeUpdate(0)}
-                                />
-                                <span className="text-sm ml-2">School</span>
-                            </label>
+                            <div className="m-3">
+                                <label className="flex items-center">
+                                    <input type="radio" name="radio-buttons" className="form-radio"
+                                           defaultChecked
+                                           onChange={() => handleOrgTypeUpdate(0)}
+                                    />
+                                    <span className="text-sm ml-2">School</span>
+                                </label>
+                            </div>
+                            <div className="m-3">
+                                <label className="flex items-center">
+                                    <input type="radio" name="radio-buttons" className="form-radio"
+                                           onChange={() => handleOrgTypeUpdate(1)}
+                                    />
+                                    <span className="text-sm ml-2">Club</span>
+                                </label>
+                            </div>
                         </div>
-                        <div className="m-3">
-                            <label className="flex items-center">
-                                <input type="radio" name="radio-buttons" className="form-radio" defaultChecked
-                                       onChange={() => handleOrgTypeUpdate(1)}
-                                />
-                                <span className="text-sm ml-2">Club</span>
-                            </label>
-                        </div>
-                    </div>
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1" htmlFor="mandatory">
@@ -186,28 +190,40 @@ export default function CampaignCreate() {
                         ))}
                     </div>
                     <div>
-                            {/* Start */}
-                            <button
-                                className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
-                                onClick={addTeam}
-                            >
-                                <svg className="fill-current text-gray-400 shrink-0" width="16" height="16"
-                                     viewBox="0 0 16 16">
-                                    <path
-                                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"/>
-                                </svg>
-                                <span className="ml-2">Add Team</span>
-                            </button>
-                            {/* End */}
+                        {/* Start */}
+                        <button
+                            className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                            onClick={addTeam}
+                        >
+                            <svg className="fill-current text-gray-400 shrink-0" width="16" height="16"
+                                 viewBox="0 0 16 16">
+                                <path
+                                    d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z"/>
+                            </svg>
+                            <span className="ml-2">Add Team</span>
+                        </button>
+                        {/* End */}
+                    </div>
+                    <Notification type="warning" open={validationNotification} setOpen={setValidationNotification}
+                                  className={""} containsActionButton={false}>
+                        <div className="font-medium text-gray-800 dark:text-gray-100 mb-1">Validation Error</div>
+                        <div>
+                            {validationErrorList.map((validationError, index) => (
+                                <div key={index}>
+                                    {validationError}
+                                    <br/>
+                                </div>
+                            ))}
                         </div>
+                    </Notification>
                     <div>
-                            <button
-                                className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
-                                onClick={handleCreate}
-                            >Create
-                                Campaign
-                            </button>
-                        </div>
+                        <button
+                            className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                            onClick={handleCreate}
+                        >Create
+                            Campaign
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -253,7 +269,9 @@ function TeamRow({team, updateTeam, deleteTeamRow, updateCoachName, index}) {
                             Expected Player Count <span className="text-red-500">*</span>
                         </label>
                         <input id="mandatory" className="form-input w-full" type="number" required
-                               defaultValue={team.expectedPlayerCount}/>
+                               defaultValue={team.expectedPlayerCount}
+                               onChange={e => updateTeam({expectedPlayerCount: e.target.value})}
+                        />
                     </div>
                     <div className="">
                         <button
@@ -274,7 +292,29 @@ function TeamRow({team, updateTeam, deleteTeamRow, updateCoachName, index}) {
     )
 }
 
-function createCampaign(campaign: CampaignType, organization: OrganizationType, Teams: TeamType[]) {
+function createCampaign(campaign: CampaignType, organization: OrganizationType, Teams: TeamType[], validationErrorList, setValidationErrorList, setValidationNotification) {
+
+    //reset past validation
+    setValidationNotification(false);
+    setValidationErrorList([]);
+
+    //validation
+    if (!organization.name.trim()) setValidationErrorList(prev => [...prev, "Organization needs Name"]);
+    if (!campaign.name.trim()) setValidationErrorList(prev => [...prev, "Campaign needs Name"]);
+
+    Teams.map((team, index) => {
+        const missingFields: string[] = [];
+        if (!team.name) missingFields.push("Name");
+        if (!team.coach?.displayName) missingFields.push("Coach Name");
+        if (team.expectedPlayerCount <= 0) missingFields.push("Expected Player Count must be greater then 0");
+
+        if (missingFields.length > 0) setValidationErrorList(prev => [...prev, `Team #${index + 1} needs the following: ${missingFields.join(", ")}`]);
+    })
+
+    if (validationErrorList.length > 0) {
+        setValidationNotification(true);
+        return;
+    }
 
     const fullCampaign: FullCampaign = {
         Campaign: campaign,
