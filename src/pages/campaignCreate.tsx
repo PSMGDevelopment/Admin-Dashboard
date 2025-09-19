@@ -63,7 +63,7 @@ export default function CampaignCreate() {
             ...prev,
             {
                 id: "",
-                organization: "",
+                organizationID: "",
                 campaignID: "",
                 campaign: "",
                 coach: {id: "", descopeUserID: "", teamID: "", displayName: ""},
@@ -297,21 +297,27 @@ function createCampaign(campaign: CampaignType, organization: OrganizationType, 
     //reset past validation
     setValidationNotification(false);
     setValidationErrorList([]);
+    const errors: string[] = [];
 
     //validation
-    if (!organization.name.trim()) setValidationErrorList(prev => [...prev, "Organization needs Name"]);
-    if (!campaign.name.trim()) setValidationErrorList(prev => [...prev, "Campaign needs Name"]);
+    if (!organization.name.trim()) errors.push("Organization needs Name");
+    if (!campaign.name.trim()) errors.push("Campaign needs Name");
+    if (Teams.length === 0) errors.push("Needs at least one team");
 
     Teams.map((team, index) => {
         const missingFields: string[] = [];
+
         if (!team.name) missingFields.push("Name");
         if (!team.coach?.displayName) missingFields.push("Coach Name");
         if (team.expectedPlayerCount <= 0) missingFields.push("Expected Player Count must be greater then 0");
 
-        if (missingFields.length > 0) setValidationErrorList(prev => [...prev, `Team #${index + 1} needs the following: ${missingFields.join(", ")}`]);
+        if (missingFields.length > 0) {
+            errors.push(`Team #${index + 1} needs the following: ${missingFields.join(", ")}`);
+        }
     })
 
-    if (validationErrorList.length > 0) {
+    if (errors.length > 0) {
+        setValidationErrorList(errors);
         setValidationNotification(true);
         return;
     }

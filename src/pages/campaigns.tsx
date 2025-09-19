@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {fetchCampaigns} from "../api/campaignsAPI"
 import CampaignModal from "../pages/campaignModal/campaignEditModal"
+import DataCard from "../components/DataCard"
 
 
 export default function Campaigns() {
@@ -32,6 +33,7 @@ export default function Campaigns() {
             <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60">
                 <h2 className="font-semibold text-gray-800 dark:text-gray-100">Campaigns</h2>
             </header>
+            {/*<DataCard title={"test"} content={"content"}/>*/}
             <div className="p-3">
                 {/* Table */}
                 <div className="overflow-x-auto">
